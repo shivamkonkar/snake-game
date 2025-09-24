@@ -8,7 +8,7 @@ DARK_GREEN = (43,51,24)
 
 screen = pygame.display.set_mode((750,750))
 
-pygame.display.set_caption("Retro Snake")
+pygame.display.set_caption("Snake Legacy")
 
 clock = pygame.time.Clock()
 
