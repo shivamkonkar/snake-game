@@ -3,8 +3,8 @@ import sys
 
 pygame.init()
 
-GREEN = (173,204,96)
-DARK_GREEN = (43,51,24)
+SAND = (237, 201, 175)
+BROWN = (101, 67, 33)
 
 screen = pygame.display.set_mode((750,750))
 
@@ -18,6 +18,6 @@ while True:
             pygame.quit()
             sys.exit()
 
-    screen.fill(GREEN)
+    screen.fill(SAND)
     pygame.display.update()
     clock.tick(60)
