@@ -24,7 +24,7 @@ pygame.display.set_caption("Snake Legacy")
 
 clock = pygame.time.Clock()
 food = Food()
-food_surface = pygame.image.load("Assets/food.png")
+food_surface = pygame.image.load("food.png")
 
 while True:
     for event in pygame.event.get():
