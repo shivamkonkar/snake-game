@@ -30,6 +30,7 @@ class Snake:
     def __init__(self):
         self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
         self.direction = Vector2(1,0)
+        self.add_block = False   # Flag to check if snake should grow
 
     def draw(self):
         for segment in self.body:
@@ -37,8 +38,18 @@ class Snake:
             pygame.draw.rect(screen, BROWN, segment_rect,0,7)
 
     def update(self):
-        self.body = self.body[:-1]
-        self.body.insert(0, self.body[0] + self.direction)
+        if self.add_block:   # If growth flag is True → don't remove last block
+            body_copy = self.body[:]
+            body_copy.insert(0, self.body[0] + self.direction)
+            self.body = body_copy
+            self.add_block = False
+        else:   # Normal movement
+            self.body = self.body[:-1]
+            self.body.insert(0, self.body[0] + self.direction)
+
+    def grow(self):   # Method to trigger growth
+        self.add_block = True
+
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
 
@@ -49,13 +60,17 @@ food = Food()
 food_surface = pygame.image.load("food.png")
 
 snake = Snake()
-SNAKE_UPDATE = pygame.USEREVENT #Custom Event to reduce snakes speed
-pygame.time.set_timer(SNAKE_UPDATE, 200) #Parameter and Event that needs to be triggered
+SNAKE_UPDATE = pygame.USEREVENT
+pygame.time.set_timer(SNAKE_UPDATE, 200)
 
 while True:
     for event in pygame.event.get():
         if event.type == SNAKE_UPDATE:
             snake.update()
+
+            if snake.body[0] == food.position:   # Check if snake head touches food
+                food.position = food.generate_random_pos()   # Respawn food at new position
+                snake.grow()   # Snake grows
 
         if event.type == pygame.QUIT:
             pygame.quit()
