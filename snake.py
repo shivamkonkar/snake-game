@@ -71,6 +71,7 @@ class Game:
             self.snake.update()
             self.check_collision_with_food()
             self.check_collision_with_edges()
+            self.check_collision_with_tail()
     
     def check_collision_with_food(self):
         if self.snake.body[0] == self.food.position:
@@ -81,6 +82,11 @@ class Game:
         if self.snake.body[0].x == number_of_cells or self.snake.body[0].x == -1:
             self.game_over()
         if self.snake.body[0].y == number_of_cells or self.snake.body[0].y == -1:
+            self.game_over()
+
+    def check_collision_with_tail(self):
+        headless_body = self.snake.body[1:]
+        if self.snake.body[0] in headless_body:
             self.game_over()
 
     def game_over(self):
