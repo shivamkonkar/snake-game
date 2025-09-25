@@ -29,16 +29,17 @@ class Food:
 class Snake:
     def __init__(self):
         self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
-        self.direction = Vector2(1,0)
+        self.direction = Vector2(1,0)   # Initial direction set to right
 
     def draw(self):
         for segment in self.body:
             segment_rect = ( segment.x * cell_size, segment.y * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, BROWN, segment_rect,0,7)
 
-    def update(self):
-        self.body = self.body[:-1]
-        self.body.insert(0, self.body[0] + self.direction)
+    def update(self):   # Moves the snake by shifting its body forward
+        self.body = self.body[:-1]   # Remove last segment
+        self.body.insert(0, self.body[0] + self.direction)   # Add new head in movement direction
+
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
 
@@ -49,12 +50,12 @@ food = Food()
 food_surface = pygame.image.load("food.png")
 
 snake = Snake()
-SNAKE_UPDATE = pygame.USEREVENT
-pygame.time.set_timer(SNAKE_UPDATE, 200)
+SNAKE_UPDATE = pygame.USEREVENT   # Custom event for snake movement
+pygame.time.set_timer(SNAKE_UPDATE, 200)   # Trigger event every 200 ms
 
 while True:
     for event in pygame.event.get():
-        if event.type == SNAKE_UPDATE:
+        if event.type == SNAKE_UPDATE:   # Move snake on timer event
             snake.update()
 
         if event.type == pygame.QUIT:
