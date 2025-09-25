@@ -5,6 +5,9 @@ import random
 
 pygame.init()
 
+title_font = pygame.font.Font(None, 40)
+score_font = pygame.font.Font(None, 25)
+
 SAND = (237, 201, 175)
 BROWN = (101, 67, 33)
 
@@ -63,6 +66,7 @@ class Game:
         self.snake = Snake()
         self.food = Food(self.snake.body)
         self.state = "RUNNING"
+        self.score = 0
 
     def draw(self):
         self.food.draw()
@@ -79,6 +83,7 @@ class Game:
         if self.snake.body[0] == self.food.position:
             self.food.position = self.food.generate_random_pos(self.snake.body)
             self.snake.add_segment = True
+            self.score = self.score+1
             
     def check_collision_with_edges(self):
         if self.snake.body[0].x == number_of_cells or self.snake.body[0].x == -1:
@@ -130,5 +135,9 @@ while True:
     screen.fill(SAND)
     pygame.draw.rect(screen, BROWN, (OFFSET-5, OFFSET-5, cell_size*number_of_cells+10, cell_size*number_of_cells+10), 5)
     game.draw()
+    title_surface = title_font.render("Snake Legacy: Desert Edition", True, BROWN)
+    screen.blit(title_surface, (OFFSET - 5 , 20))
+    title_surface = title_font.render("SCORE: "+ str(game.score), True, BROWN)
+    screen.blit(title_surface, (OFFSET-5, OFFSET + cell_size*number_of_cells + 10))
     pygame.display.update()
     clock.tick(60)
