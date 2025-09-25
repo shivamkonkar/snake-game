@@ -19,15 +19,16 @@ class Food:
         food_rect = pygame.Rect(self.position.x * cell_size, self.position.y * cell_size, cell_size,cell_size)
         screen.blit(food_surface, food_rect)
 
+    def generate_random_cell(self):
+            x = random.randint(0, number_of_cells-1)
+            y = random.randint(0, number_of_cells-1)
+            return Vector2(x, y)
+
     def generate_random_pos(self, snake_body):
-        x = random.randint(0, number_of_cells - 1)
-        y = random.randint(0, number_of_cells - 1)
-        position = Vector2(x, y)
+        position = self.generate_random_cell()
 
         while position in snake_body:
-            x = random.randint(0, number_of_cells - 1)
-            y = random.randint(0, number_of_cells - 1)
-            position = Vector2(x, y)
+            position = self.generate_random_cell()
         return position
 
 
@@ -35,6 +36,7 @@ class Snake:
     def __init__(self):
         self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
         self.direction = Vector2(1,0)
+        self.add_segment = False
 
     def draw(self):
         for segment in self.body:
@@ -42,8 +44,11 @@ class Snake:
             pygame.draw.rect(screen, BROWN, segment_rect,0,7)
 
     def update(self):
-        self.body = self.body[:-1]
         self.body.insert(0, self.body[0] + self.direction)
+        if self.add_segment == True:
+            self.add_segment = False
+        else:
+            self.body = self.body[:-1]
 
 class Game:
     def __init__(self):
@@ -61,6 +66,11 @@ class Game:
     def check_collision_with_food(self):
         if self.snake.body[0] == self.food.position:
             self.food.position = self.food.generate_random_pos(self.snake.body)
+            self.snake.add_segment = True
+            # self.score += 1
+            # self.snake.eat_sound.play()
+
+
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
 pygame.display.set_caption("Snake Legacy")
