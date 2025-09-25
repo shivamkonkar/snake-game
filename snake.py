@@ -28,12 +28,12 @@ class Food:
 
 class Snake:
     def __init__(self):
-        self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
+        self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]   # Snake starts with 3 segments
 
     def draw(self):
-        for segment in self.body:
-            segment_rect = ( segment.x * cell_size, segment.y * cell_size, cell_size, cell_size)
-            pygame.draw.rect(screen, BROWN, segment_rect,0,7)
+        for segment in self.body:   # Loop through all snake segments
+            segment_rect = ( segment.x * cell_size, segment.y * cell_size, cell_size, cell_size)   # Position and size of each segment
+            pygame.draw.rect(screen, BROWN, segment_rect,0,7)   # Draw each segment as a brown rounded rectangle
 
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
@@ -44,7 +44,7 @@ clock = pygame.time.Clock()
 food = Food()
 food_surface = pygame.image.load("food.png")
 
-snake = Snake()
+snake = Snake()   # Create a snake object
 
 while True:
     for event in pygame.event.get():
@@ -54,6 +54,6 @@ while True:
 
     screen.fill(SAND)
     food.draw()
-    snake.draw()
+    snake.draw()   # Draw the snake on screen
     pygame.display.update()
     clock.tick(60)
