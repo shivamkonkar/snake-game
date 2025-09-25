@@ -18,18 +18,11 @@ class Food:
     def draw(self):
         food_rect = pygame.Rect(self.position.x * cell_size, self.position.y * cell_size, cell_size,cell_size)
         screen.blit(food_surface, food_rect)
-
-    def generate_random_pos(self, snake_body):
-        x = random.randint(0, number_of_cells - 1)
-        y = random.randint(0, number_of_cells - 1)
-        position = Vector2(x, y)
-
-        while position in snake_body:
-            x = random.randint(0, number_of_cells - 1)
-            y = random.randint(0, number_of_cells - 1)
-            position = Vector2(x, y)
-        return position
-
+        
+    def generate_random_pos(self):
+        x = random.randint(0, number_of_cells - 1 )
+        y = random.randint(0, number_of_cells - 1 )
+        position = Vector2(x,y)
 
 class Snake:
     def __init__(self):
