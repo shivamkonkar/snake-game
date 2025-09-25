@@ -49,8 +49,8 @@ food = Food()
 food_surface = pygame.image.load("food.png")
 
 snake = Snake()
-SNAKE_UPDATE = pygame.USEREVENT
-pygame.time.set_timer(SNAKE_UPDATE, 200)
+SNAKE_UPDATE = pygame.USEREVENT #Custom Event to reduce snakes speed
+pygame.time.set_timer(SNAKE_UPDATE, 200) #Parameter and Event that needs to be triggered
 
 while True:
     for event in pygame.event.get():
@@ -60,6 +60,16 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w and snake.direction != Vector2(0,1):
+                snake.direction = Vector2(0,-1)
+            if event.key == pygame.K_s and snake.direction != Vector2(0,-1):
+                snake.direction = Vector2(0,1)
+            if event.key == pygame.K_a and snake.direction != Vector2(1,0):
+                snake.direction = Vector2(-1, 0)
+            if event.key == pygame.K_d and snake.direction != Vector2(-1,0):
+                snake.direction = Vector2(1, 0)
 
     screen.fill(SAND)
     food.draw()
