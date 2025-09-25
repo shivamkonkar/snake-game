@@ -12,17 +12,22 @@ cell_size = 30
 number_of_cells = 25
 
 class Food:
-    def __init__(self):
-        self.position = self.generate_random_pos()
+    def __init__(self, snake_body):
+        self.position = self.generate_random_pos(snake_body)
 
     def draw(self):
         food_rect = pygame.Rect(self.position.x * cell_size, self.position.y * cell_size, cell_size,cell_size)
         screen.blit(food_surface, food_rect)
 
-    def generate_random_pos(self):
-        x = random.randint(0, number_of_cells - 1 )
-        y = random.randint(0, number_of_cells - 1 )
-        position = Vector2(x,y)
+    def generate_random_pos(self, snake_body):
+        x = random.randint(0, number_of_cells - 1)
+        y = random.randint(0, number_of_cells - 1)
+        position = Vector2(x, y)
+
+        while position in snake_body:
+            x = random.randint(0, number_of_cells - 1)
+            y = random.randint(0, number_of_cells - 1)
+            position = Vector2(x, y)
         return position
 
 
@@ -30,7 +35,6 @@ class Snake:
     def __init__(self):
         self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
         self.direction = Vector2(1,0)
-        self.add_block = False   # Flag to check if snake should grow
 
     def draw(self):
         for segment in self.body:
@@ -38,56 +42,49 @@ class Snake:
             pygame.draw.rect(screen, BROWN, segment_rect,0,7)
 
     def update(self):
-        if self.add_block:   # If growth flag is True → don't remove last block
-            body_copy = self.body[:]
-            body_copy.insert(0, self.body[0] + self.direction)
-            self.body = body_copy
-            self.add_block = False
-        else:   # Normal movement
-            self.body = self.body[:-1]
-            self.body.insert(0, self.body[0] + self.direction)
+        self.body = self.body[:-1]
+        self.body.insert(0, self.body[0] + self.direction)
 
-    def grow(self):   # Method to trigger growth
-        self.add_block = True
+class Game:
+    def __init__(self):
+        self.snake = Snake()
+        self.food = Food(self.snake.body)
 
+    def draw(self):
+        self.food.draw()
+        self.snake.draw()
+
+    def update(self):
+        self.snake.update()
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
-
 pygame.display.set_caption("Snake Legacy")
-
 clock = pygame.time.Clock()
-food = Food()
 food_surface = pygame.image.load("food.png")
-
-snake = Snake()
+game = Game()
 SNAKE_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SNAKE_UPDATE, 200)
 
 while True:
     for event in pygame.event.get():
         if event.type == SNAKE_UPDATE:
-            snake.update()
-
-            if snake.body[0] == food.position:   # Check if snake head touches food
-                food.position = food.generate_random_pos()   # Respawn food at new position
-                snake.grow()   # Snake grows
+            game.update()
 
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w and snake.direction != Vector2(0,1):
-                snake.direction = Vector2(0,-1)
-            if event.key == pygame.K_s and snake.direction != Vector2(0,-1):
-                snake.direction = Vector2(0,1)
-            if event.key == pygame.K_a and snake.direction != Vector2(1,0):
-                snake.direction = Vector2(-1, 0)
-            if event.key == pygame.K_d and snake.direction != Vector2(-1,0):
-                snake.direction = Vector2(1, 0)
+            if event.key == pygame.K_w and game.snake.direction != Vector2(0,1):
+                game.snake.direction = Vector2(0,-1)
+            if event.key == pygame.K_s and game.snake.direction != Vector2(0,-1):
+                game.snake.direction = Vector2(0,1)
+            if event.key == pygame.K_a and game.snake.direction != Vector2(1,0):
+                game.snake.direction = Vector2(-1, 0)
+            if event.key == pygame.K_d and game.snake.direction != Vector2(-1,0):
+                game.snake.direction = Vector2(1, 0)    
 
     screen.fill(SAND)
-    food.draw()
-    snake.draw()
+    game.draw()
     pygame.display.update()
     clock.tick(60)
