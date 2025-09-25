@@ -42,6 +42,8 @@ class Snake:
         self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
         self.direction = Vector2(1,0)
         self.add_segment = False
+        self.eat_sound = pygame.mixer.Sound("eat.mp3")
+        self.wall_sound = pygame.mixer.Sound("wall.mp3")
 
     def draw(self):
         for segment in self.body:
@@ -84,6 +86,8 @@ class Game:
             self.food.position = self.food.generate_random_pos(self.snake.body)
             self.snake.add_segment = True
             self.score = self.score+1
+            self.snake.eat_sound.play()
+            
             
     def check_collision_with_edges(self):
         if self.snake.body[0].x == number_of_cells or self.snake.body[0].x == -1:
@@ -100,6 +104,7 @@ class Game:
         self.snake.reset()
         self.food.generate_random_pos(self.snake.body)
         self.state = "STOPPED"
+        self.snake.wall_sound.play()
 
 
 
