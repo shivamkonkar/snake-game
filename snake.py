@@ -36,7 +36,7 @@ class Snake:
     def __init__(self):
         self.body = [Vector2(6, 8), Vector2(5, 8), Vector2(4, 8)]
         self.direction = Vector2(1,0)
-        self.add_segment = False
+        self.add_segment = False                #flag to check if snake should grow
 
     def draw(self):
         for segment in self.body:
@@ -44,8 +44,8 @@ class Snake:
             pygame.draw.rect(screen, BROWN, segment_rect,0,7)
 
     def update(self):
-        self.body.insert(0, self.body[0] + self.direction)
-        if self.add_segment == True:
+        self.body.insert(0, self.body[0] + self.direction)    # if it is true we insert the block in front of snakes head
+        if self.add_segment == True:            
             self.add_segment = False
         else:
             self.body = self.body[:-1]
@@ -66,7 +66,9 @@ class Game:
     def check_collision_with_food(self):
         if self.snake.body[0] == self.food.position:
             self.food.position = self.food.generate_random_pos(self.snake.body)
-            self.snake.add_segment = True
+            self.snake.add_segment = True           #we make snake growth flag true after snake eats
+
+
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
 pygame.display.set_caption("Snake Legacy")
