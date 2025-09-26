@@ -60,7 +60,7 @@ class Game:
     def __init__(self):
         self.snake = Snake()
         self.food = Food(self.snake.body)
-        self.state = "RUNNING"
+        self.state = "RUNNING"      #  flag that checks if game is over
 
     def draw(self):
         self.food.draw()
@@ -77,13 +77,13 @@ class Game:
             self.food.position = self.food.generate_random_pos(self.snake.body)
             self.snake.add_segment = True
             
-    def check_collision_with_edges(self):
+    def check_collision_with_edges(self):       # If we collide with game edges game is over
         if self.snake.body[0].x == number_of_cells or self.snake.body[0].x == -1:
             self.game_over()
         if self.snake.body[0].y == number_of_cells or self.snake.body[0].y == -1:
             self.game_over()
 
-    def game_over(self):
+    def game_over(self):                # Game over method
         self.snake.reset()
         self.food.generate_random_pos(self.snake.body)
         self.state = "STOPPED"
@@ -107,7 +107,7 @@ while True:
             pygame.quit()
             sys.exit()
 
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN:        # Updating the fame over flag after key is pressed
             if game.state == "STOPPED":
                 game.state = "RUNNING"
             if event.key == pygame.K_w and game.snake.direction != Vector2(0,1):
