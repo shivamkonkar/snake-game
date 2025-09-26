@@ -84,9 +84,9 @@ class Game:
         if self.snake.body[0].y == number_of_cells or self.snake.body[0].y == -1:
             self.game_over()
 
-    def check_collision_with_tail(self):
-        headless_body = self.snake.body[1:]
-        if self.snake.body[0] in headless_body:
+    def check_collision_with_tail(self):        # method to check for collision with head
+        headless_body = self.snake.body[1:]     # List with all items except for index 0
+        if self.snake.body[0] in headless_body: # check for collision
             self.game_over()
 
     def game_over(self):
