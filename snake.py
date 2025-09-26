@@ -12,17 +12,18 @@ cell_size = 30
 number_of_cells = 25
 
 class Food:
-    def __init__(self, snake_body):   # Food now takes snake_body so it can avoid spawning on the snake
-        self.position = self.generate_random_pos(snake_body)
+    def __init__(self):   
+        self.position = self.generate_random_pos()
 
     def draw(self):
         food_rect = pygame.Rect(self.position.x * cell_size, self.position.y * cell_size, cell_size,cell_size)
         screen.blit(food_surface, food_rect)
         
-    def generate_random_pos(self):   # Signature changed to match constructor
+    def generate_random_pos(self):   
         x = random.randint(0, number_of_cells - 1 )
         y = random.randint(0, number_of_cells - 1 )
         position = Vector2(x,y)
+        return position
 
 
 class Snake:
@@ -43,7 +44,7 @@ class Snake:
 class Game:   # New class added to organize Snake and Food together
     def __init__(self):
         self.snake = Snake()
-        self.food = Food(self.snake.body)   # Food created with snake body passed in
+        self.food = Food()   
 
     def draw(self):
         self.food.draw()
