@@ -67,10 +67,6 @@ class Game:
         if self.snake.body[0] == self.food.position:
             self.food.position = self.food.generate_random_pos(self.snake.body)
             self.snake.add_segment = True
-            # self.score += 1
-            # self.snake.eat_sound.play()
-
-
 
 screen = pygame.display.set_mode((cell_size*number_of_cells,cell_size*number_of_cells))
 pygame.display.set_caption("Snake Legacy")
